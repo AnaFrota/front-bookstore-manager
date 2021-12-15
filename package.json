@@ -1,33 +1,69 @@
 {
-  "name": "library-manager-front",
+  "name": "front-library",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-      "serve": "vue-cli-service serve",
-      "build": "vue-cli-service build",
-      "postinstall": "npm run build",
-      "start": "node server.js",
-      "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm run dev"
+  "engines": { "node" : "14.18.1" },
+    "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "postinstall": "npm run build",
+    "start": "node server.js",
+    "install:clean": "rm -rf node_modules/ && rm package-lock.json && npm install && npm run dev"
   },
+
   "dependencies": {
-      "apexcharts": "^3.29.0",
-      "axios": "^0.23.0",
-      "express": "^4.17.1",
-      "moment": "^2.29.1",
-      "vue": "^2.6.11",
-      "vue-apexcharts": "^1.6.2",
-      "vue-moment": "^4.1.0",
-      "vue-router": "^3.2.0",
-      "vue-sweetalert2": "^5.0.2",
-      "vuetify": "^2.4.0"
+    "apexcharts": "^3.29.0",
+    "axios": "^0.24.0",
+    "core-js": "^3.6.5",
+    "express": "^4.17.1",
+    "moment": "^2.29.1",
+    "register-service-worker": "^1.7.1",
+    "vue": "^2.6.11",
+    "vue-apexcharts": "^1.6.2",
+    "vue-router": "^3.2.0",
+    "vue-sweetalert2": "^5.0.2",
+    "vuetify": "^2.4.0",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
-      "@vue/cli-plugin-router": "~4.5.0",
-      "@vue/cli-service": "~4.5.0",
-      "sass": "~1.32.0",
-      "sass-loader": "^10.0.0",
-      "vue-cli-plugin-vuetify": "~2.4.3",
-      "vue-template-compiler": "^2.6.11",
-      "vuetify-loader": "^1.7.0"
-  }
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-pwa": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.12.0",
+    "prettier": "^2.2.1",
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0",
+    "vue-cli-plugin-vuetify": "~2.4.3",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify-loader": "^1.7.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended",
+      "@vue/prettier"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }
