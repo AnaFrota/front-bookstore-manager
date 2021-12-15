@@ -2,8 +2,10 @@
   "name": "front-library",
   "version": "0.1.0",
   "private": true,
-  "engines": { "node" : "14.18.1" },
-    "scripts": {
+  "engines": {
+    "node": "14.18.1"
+  },
+  "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
@@ -11,7 +13,6 @@
     "start": "node server.js",
     "install:clean": "rm -rf node_modules/ && rm package-lock.json && npm install && npm run dev"
   },
-
   "dependencies": {
     "apexcharts": "^3.29.0",
     "axios": "^0.24.0",
