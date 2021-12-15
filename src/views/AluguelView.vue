@@ -37,7 +37,7 @@
                   Novo Aluguel
                 </v-btn>
               </template>
-              <v-card>
+              <v-card width="500" height="700">
                 <v-card-title class="indigo lighten-3">
                   <span class="text-h5 white--text">{{ formTitle }}</span>
                 </v-card-title>

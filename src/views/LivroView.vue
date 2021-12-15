@@ -36,7 +36,7 @@
                   Novo Livro
                 </v-btn>
               </template>
-              <v-card>
+              <v-card width="410" height="690">
                 <v-card-title class="indigo lighten-3">
                   <span class="text-h5 white--text">{{ formTitle }}</span>
                 </v-card-title>

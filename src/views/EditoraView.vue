@@ -36,7 +36,7 @@
                   Nova Editora
                 </v-btn>
               </template>
-              <v-card>
+              <v-card  width="300">
                 <v-card-title class="indigo lighten-3">
                   <span class="text-h5 white--text">{{ formTitle }}</span>
                 </v-card-title>
@@ -44,7 +44,7 @@
                   <v-form ref="form">
                     <v-container>
                       <v-row>
-                        <v-col cols="12">
+                        <v-col cols="20">
                           <v-text-field
                             v-model="editora.nome"
                             label="Nome"
@@ -57,7 +57,7 @@
                         </v-col>
                       </v-row>
                       <v-row>
-                        <v-col cols="12">
+                        <v-col cols="20">
                           <v-text-field
                             v-model="editora.cidade"
                             label="Cidade"
@@ -248,7 +248,7 @@ export default {
           this.initialize();
         })
         .catch(() => {
-          this.$swal(
+          Swal.fire(
             "Editora não pode ser deletada",
             "Essa editora está vinculada a um livro",
             "error"

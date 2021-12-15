@@ -36,7 +36,7 @@
                   Novo Usuário
                 </v-btn>
               </template>
-              <v-card>
+              <v-card width="410" height="590">
                 <v-card-title class="indigo lighten-3">
                   <span class="text-h5 white--text">{{ formTitle }}</span>
                 </v-card-title>
@@ -175,7 +175,7 @@
               next-icon="mdi-menu-right"
               prev-icon="mdi-menu-left"
               @input="handlePageChange"
-              color="indigo accent-1"
+               color="indigo accent-1"
             ></v-pagination>
           </v-col>
         </v-row>
@@ -227,20 +227,24 @@ export default {
         sortable: false,
       },
     ],
-    rules: {
-      required: (value) => !!value || "Campo obrigatório",
-      counterMin: (value) =>
-        (value && value.length >= 3) || "No mínimo 3 caracteres",
-      counterMax40: (value) =>
-        (value && value.length <= 40) || "No máximo 40 caracteres",
-      counterMax50: (value) =>
-        (value && value.length <= 50) || "No máximo 50 caracteres",
-      email: (value) => {
-        const pattern =
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return pattern.test(value) || "E-mail invalido.";
-      },
-    },
+   rules: {
+            required: value => !!value || 'Campo obrigatório',
+            counterMin: value => (value && value.length >= 3) || 'No mínimo 3 caracteres',
+            counterMax40: value => (value && value.length <= 40) || 'No máximo 40 caracteres',
+            counterMax50: value => (value && value.length <= 50) || 'No máximo 50 caracteres',
+            email: value => {
+                const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return pattern.test(value) || 'E-mail invalido.';
+            },
+            nome: value => {
+                const pattern = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/;
+                return pattern.test(value) || 'Nome inválido.';
+            },
+            cidade: value => {
+                const pattern = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/;
+                return pattern.test(value) || 'Nome da cidade inválido.';
+            },
+        },
   }),
   computed: {
     formTitle() {
@@ -259,36 +263,36 @@ export default {
     this.initialize();
   },
   methods: {
-    initialize() {
-      this.loading = true;
-      const params = this.getRequestParams();
-      UsuarioService.findAll(params).then((res) => {
-        const { totalElements, content, totalPages } = res.data;
-        this.totalusuarios = totalElements;
-        this.usuarios = content;
-        this.totalPages = totalPages;
-        this.loading = false;
-      });
-    },
-    getRequestParams(page, pageSize) {
-      let params = {};
-      if (page) {
-        params["page"] = page - 1;
-      }
-      if (pageSize) {
-        params["size"] = pageSize;
-      }
-      return params;
-    },
-    handlePageChange(value) {
-      this.page = value;
-      this.initialize();
-    },
-    handlePageSizeChange(size) {
-      this.pageSize = size;
-      this.page = 1;
-      this.initialize();
-    },
+        initialize() {
+            this.loading = true;
+            const params = this.getRequestParams(this.page, this.pageSize);
+            UsuarioService.findAll(params).then(res => {
+                const { content, totalElements, totalPages } = res.data;
+                this.usuarios = content;
+                this.totalusuarios = totalElements;
+                this.totalPages = totalPages;
+                this.loading = false;
+            });
+        },
+        getRequestParams(page, pageSize) {
+            let params = {};
+            if (page) {
+                params['page'] = page - 1;
+            }
+            if (pageSize) {
+                params['size'] = pageSize;
+            }
+            return params;
+        },
+        handlePageChange(value) {
+            this.page = value;
+            this.initialize();
+        },
+        handlePageSizeChange(size) {
+            this.pageSize = size;
+            this.page = 1;
+            this.initialize();
+        },
     editItem(item) {
       this.usuario = { ...item };
       this.dialog = true;
