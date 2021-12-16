@@ -34,9 +34,9 @@
                   v-on="on"
                 >
                   Nova Editora
-                </v-btn>
+              </v-btn>
               </template>
-              <v-card  width="300">
+              <v-card>
                 <v-card-title class="indigo lighten-3">
                   <span class="text-h5 white--text">{{ formTitle }}</span>
                 </v-card-title>
@@ -44,7 +44,7 @@
                   <v-form ref="form">
                     <v-container>
                       <v-row>
-                        <v-col cols="20">
+                        <v-col cols="12">
                           <v-text-field
                             v-model="editora.nome"
                             label="Nome"
@@ -57,7 +57,7 @@
                         </v-col>
                       </v-row>
                       <v-row>
-                        <v-col cols="20">
+                        <v-col cols="12">
                           <v-text-field
                             v-model="editora.cidade"
                             label="Cidade"

@@ -36,7 +36,7 @@
                   Novo Usuário
                 </v-btn>
               </template>
-              <v-card width="410" height="590">
+            <v-card>
                 <v-card-title class="indigo lighten-3">
                   <span class="text-h5 white--text">{{ formTitle }}</span>
                 </v-card-title>
