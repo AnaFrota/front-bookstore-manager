@@ -3,16 +3,16 @@
     <v-card rounded="0">
       <v-data-table
         :headers="headers"
-        :items="editoras"
+        :items="usuarios"
         :items-per-page="pageSize"
-        :search="search"
-        hide-default-footer
         :loading="loading"
+        :search="search"
         class="elevation-1 rounded-t"
+        hide-default-footer
       >
         <template v-slot:top>
           <v-toolbar flat class="indigo lighten-3 rounded-t">
-            <v-toolbar-title class="white--text">Editoras</v-toolbar-title>
+            <v-toolbar-title class="white--text">Usuários</v-toolbar-title>
             <v-divider class="mx-4 white" inset vertical></v-divider>
             <v-text-field
               v-model="search"
@@ -33,8 +33,8 @@
                   v-bind="attrs"
                   v-on="on"
                 >
-                  Nova Editora
-              </v-btn>
+                  Novo Usuário
+                </v-btn>
               </template>
               <v-card>
                 <v-card-title class="indigo lighten-3">
@@ -46,11 +46,15 @@
                       <v-row>
                         <v-col cols="12">
                           <v-text-field
-                            v-model="editora.nome"
+                            v-model="usuario.nome"
                             label="Nome"
-                            :rules="rules"
+                            :rules="[
+                              rules.required,
+                              rules.counterMin,
+                              rules.counterMax40,
+                            ]"
                             outlined
-                            hint="Digite o nome da editora"
+                            hint="Digite o nome da usuario"
                             color="indigo lighten-3"
                             counter="40"
                           ></v-text-field>
@@ -59,13 +63,47 @@
                       <v-row>
                         <v-col cols="12">
                           <v-text-field
-                            v-model="editora.cidade"
+                            v-model="usuario.cidade"
                             label="Cidade"
-                            :rules="rules"
+                            :rules="[
+                              rules.required,
+                              rules.counterMin,
+                              rules.counterMax40,
+                            ]"
                             outlined
-                            hint="Digite a cidade da editora"
-                            color="indigo accent-1"
+                            color="indigo lighten-3"
+                            hint="Digite a cidade da usuario"
                             counter="40"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="usuario.endereco"
+                            label="Endereço"
+                            :rules="[
+                              rules.required,
+                              rules.counterMin,
+                              rules.counterMax50,
+                            ]"
+                            outlined
+                            color="indigo lighten-3"
+                            hint="Digite o endereço do usuario"
+                            counter="50"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="usuario.email"
+                            label="Email"
+                            :rules="[rules.email, rules.counterMax50]"
+                            outlined
+                            color="indigo lighten-3"
+                            hint="Digite o e-mail da usuario"
+                            counter="50"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -114,7 +152,7 @@
       </v-data-table>
     </v-card>
     <v-divider></v-divider>
-    <v-card color="indigo lighten-3 rounded-b" rounded="0">
+    <v-card color="indigo lighten-3" rounded="0">
       <v-col cols="12">
         <v-row>
           <v-col cols="4" sm="4">
@@ -123,10 +161,10 @@
               :items="pageSizes"
               label="Itens por Página"
               @change="handlePageSizeChange"
-              outlined
-              item-color="black"
               color="black"
+              item-color="black"
               dark
+              outlined
             ></v-select>
           </v-col>
           <v-col cols="12" sm="8">
@@ -147,8 +185,8 @@
 </template>
 
 <script>
-import editoraService from "../service/EditoraService";
 import Swal from "sweetalert2";
+import UsuarioService from "@/service/UsuarioService";
 export default {
   name: "App",
   data: () => ({
@@ -156,16 +194,18 @@ export default {
     dialogDelete: false,
     loading: true,
     search: "",
-    editoras: [],
-    totalEditoras: 0,
+    usuarios: [],
+    totalusuarios: 0,
     page: 1,
     totalPages: 0,
     pageSize: 5,
     pageSizes: [5, 10, 15],
-    editora: {
+    usuario: {
       id: null,
       nome: "",
       cidade: "",
+      endereco: "",
+      email: "",
     },
     headers: [
       {
@@ -176,17 +216,43 @@ export default {
       },
       { text: "Nome", value: "nome" },
       { text: "Cidade", value: "cidade" },
-      { text: "Ações", value: "actions", sortable: false },
+      {
+        text: "Endereço",
+        value: "endereco",
+      },
+      { text: "Email", value: "email" },
+      {
+        text: "Ações",
+        value: "actions",
+        sortable: false,
+      },
     ],
-    rules: [
-      (value) => !!value || "Campo obrigatório",
-      (value) => (value && value.length >= 3) || "No mínimo 3 caracteres",
-      (value) => (value && value.length <= 40) || "No máximo 40 caracteres",
-    ],
+    rules: {
+      required: (value) => !!value || "Campo obrigatório",
+      counterMin: (value) =>
+        (value && value.length >= 3) || "No mínimo 3 caracteres",
+      counterMax40: (value) =>
+        (value && value.length <= 40) || "No máximo 40 caracteres",
+      counterMax50: (value) =>
+        (value && value.length <= 50) || "No máximo 50 caracteres",
+      email: (value) => {
+        const pattern =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return pattern.test(value) || "E-mail invalido.";
+      },
+      nome: (value) => {
+        const pattern = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/;
+        return pattern.test(value) || "Nome inválido.";
+      },
+      cidade: (value) => {
+        const pattern = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/;
+        return pattern.test(value) || "Nome da cidade inválido.";
+      },
+    },
   }),
   computed: {
     formTitle() {
-      return !this.editora.id ? "Nova editora" : "Editar editora";
+      return !this.usuario.id ? "Novo Usuário" : "Editar Usuário";
     },
   },
   watch: {
@@ -202,12 +268,12 @@ export default {
   },
   methods: {
     initialize() {
-      const params = this.getRequestParams(this.page, this.pageSize);
       this.loading = true;
-      editoraService.findAll(params).then((res) => {
-        const { totalElements, totalPages, content } = res.data;
-        this.editoras = content;
-        this.totalEditoras = totalElements;
+      const params = this.getRequestParams(this.page, this.pageSize);
+      UsuarioService.findAll(params).then((res) => {
+        const { content, totalElements, totalPages } = res.data;
+        this.usuarios = content;
+        this.totalusuarios = totalElements;
         this.totalPages = totalPages;
         this.loading = false;
       });
@@ -232,25 +298,24 @@ export default {
       this.initialize();
     },
     editItem(item) {
-      this.editora = { ...item };
+      this.usuario = { ...item };
       this.dialog = true;
     },
     deleteItem(item) {
-      this.editora = { ...item };
+      this.usuario = { ...item };
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      editoraService
-        .delete(this.editora.id)
+      UsuarioService.delete(this.usuario.id)
         .then(() => {
-          Swal.fire("Editora deletada com sucesso", "", "success");
-          this.editora = {};
+          Swal.fire("Usuário deletado com sucesso", "", "error");
+          this.usuario = {};
           this.initialize();
         })
         .catch(() => {
           Swal.fire(
-            "Editora não pode ser deletada",
-            "Essa editora está vinculada a um livro",
+            "Usuário não pode ser deletado",
+            "Esse usuário está vinculado a um aluguel",
             "error"
           );
         });
@@ -260,7 +325,7 @@ export default {
       this.dialog = false;
       this.$refs.form.resetValidation();
       if (!this.dialog) {
-        this.editora = {};
+        this.usuario = {};
       }
     },
     closeDelete() {
@@ -268,20 +333,20 @@ export default {
     },
     save() {
       if (this.$refs.form.validate()) {
-        if (this.editora.id) {
-          editoraService.update(this.editora).then(() => {
-            Swal.fire("Editora alterada com sucesso", "", "success");
-            this.editora = {};
+        if (this.usuario.id) {
+          UsuarioService.update(this.usuario).then(() => {
+            Swal.fire("Usuário alterado com sucesso", "", "success");
+            this.usuario = {};
             this.initialize();
           });
         } else {
-          editoraService.save(this.editora).then(() => {
-            Swal.fire("Editora cadastrada com sucesso", "", "success");
-            this.editora = {};
+          UsuarioService.save(this.usuario).then(() => {
+            Swal.fire("Usuário cadastrado com sucesso", "", "success");
+            this.usuario = {};
             this.initialize();
           });
         }
-        this.editora = {};
+        this.usuario = {};
         this.close();
       }
     },

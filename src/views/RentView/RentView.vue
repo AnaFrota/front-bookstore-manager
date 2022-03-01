@@ -1,4 +1,5 @@
--<template>
+-
+<template>
   <div>
     <v-card rounded="0">
       <v-data-table
@@ -37,7 +38,7 @@
                   Novo Aluguel
                 </v-btn>
               </template>
-              <v-card >
+              <v-card>
                 <v-card-title class="indigo lighten-3">
                   <span class="text-h5 white--text">{{ formTitle }}</span>
                 </v-card-title>
@@ -268,9 +269,9 @@
 </template>
 <script>
 import Swal from "sweetalert2";
-import aluguelService from "../service/AluguelService";
-import usuarioService from "../service/UsuarioService";
-import livroService from "../service/LivroService";
+import aluguelService from "@/service/AluguelService";
+import usuarioService from "@/service/UsuarioService";
+import livroService from "@/service/LivroService";
 import moment from "moment";
 export default {
   name: "App",

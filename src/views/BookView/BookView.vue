@@ -1,4 +1,5 @@
--<template>
+-
+<template>
   <div>
     <v-card rounded="0">
       <v-data-table
@@ -36,7 +37,7 @@
                   Novo Livro
                 </v-btn>
               </template>
-              <v-card >
+              <v-card>
                 <v-card-title class="indigo lighten-3">
                   <span class="text-h5 white--text">{{ formTitle }}</span>
                 </v-card-title>
@@ -226,8 +227,8 @@
 
 <script>
 import Swal from "sweetalert2";
-import livroService from "../service/LivroService";
-import editoraService from "../service/EditoraService";
+import livroService from "@/service/LivroService";
+import editoraService from "@/service/EditoraService";
 export default {
   name: "App",
   data: () => ({

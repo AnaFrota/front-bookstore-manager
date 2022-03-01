@@ -3,16 +3,16 @@
     <v-card rounded="0">
       <v-data-table
         :headers="headers"
-        :items="usuarios"
+        :items="editoras"
         :items-per-page="pageSize"
-        :loading="loading"
         :search="search"
-        class="elevation-1 rounded-t"
         hide-default-footer
+        :loading="loading"
+        class="elevation-1 rounded-t"
       >
         <template v-slot:top>
           <v-toolbar flat class="indigo lighten-3 rounded-t">
-            <v-toolbar-title class="white--text">Usuários</v-toolbar-title>
+            <v-toolbar-title class="white--text">Editoras</v-toolbar-title>
             <v-divider class="mx-4 white" inset vertical></v-divider>
             <v-text-field
               v-model="search"
@@ -33,10 +33,10 @@
                   v-bind="attrs"
                   v-on="on"
                 >
-                  Novo Usuário
+                  Nova Editora
                 </v-btn>
               </template>
-            <v-card>
+              <v-card>
                 <v-card-title class="indigo lighten-3">
                   <span class="text-h5 white--text">{{ formTitle }}</span>
                 </v-card-title>
@@ -46,15 +46,11 @@
                       <v-row>
                         <v-col cols="12">
                           <v-text-field
-                            v-model="usuario.nome"
+                            v-model="editora.nome"
                             label="Nome"
-                            :rules="[
-                              rules.required,
-                              rules.counterMin,
-                              rules.counterMax40,
-                            ]"
+                            :rules="rules"
                             outlined
-                            hint="Digite o nome da usuario"
+                            hint="Digite o nome da editora"
                             color="indigo lighten-3"
                             counter="40"
                           ></v-text-field>
@@ -63,47 +59,13 @@
                       <v-row>
                         <v-col cols="12">
                           <v-text-field
-                            v-model="usuario.cidade"
+                            v-model="editora.cidade"
                             label="Cidade"
-                            :rules="[
-                              rules.required,
-                              rules.counterMin,
-                              rules.counterMax40,
-                            ]"
+                            :rules="rules"
                             outlined
-                            color="indigo lighten-3"
-                            hint="Digite a cidade da usuario"
+                            hint="Digite a cidade da editora"
+                            color="indigo accent-1"
                             counter="40"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12">
-                          <v-text-field
-                            v-model="usuario.endereco"
-                            label="Endereço"
-                            :rules="[
-                              rules.required,
-                              rules.counterMin,
-                              rules.counterMax50,
-                            ]"
-                            outlined
-                            color="indigo lighten-3"
-                            hint="Digite o endereço do usuario"
-                            counter="50"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12">
-                          <v-text-field
-                            v-model="usuario.email"
-                            label="Email"
-                            :rules="[rules.email, rules.counterMax50]"
-                            outlined
-                            color="indigo lighten-3"
-                            hint="Digite o e-mail da usuario"
-                            counter="50"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -152,7 +114,7 @@
       </v-data-table>
     </v-card>
     <v-divider></v-divider>
-    <v-card color="indigo lighten-3" rounded="0">
+    <v-card color="indigo lighten-3 rounded-b" rounded="0">
       <v-col cols="12">
         <v-row>
           <v-col cols="4" sm="4">
@@ -161,10 +123,10 @@
               :items="pageSizes"
               label="Itens por Página"
               @change="handlePageSizeChange"
-              color="black"
-              item-color="black"
-              dark
               outlined
+              item-color="black"
+              color="black"
+              dark
             ></v-select>
           </v-col>
           <v-col cols="12" sm="8">
@@ -175,7 +137,7 @@
               next-icon="mdi-menu-right"
               prev-icon="mdi-menu-left"
               @input="handlePageChange"
-               color="indigo accent-1"
+              color="indigo accent-1"
             ></v-pagination>
           </v-col>
         </v-row>
@@ -185,8 +147,8 @@
 </template>
 
 <script>
+import editoraService from "@/service/EditoraService";
 import Swal from "sweetalert2";
-import UsuarioService from "../service/UsuarioService";
 export default {
   name: "App",
   data: () => ({
@@ -194,18 +156,16 @@ export default {
     dialogDelete: false,
     loading: true,
     search: "",
-    usuarios: [],
-    totalusuarios: 0,
+    editoras: [],
+    totalEditoras: 0,
     page: 1,
     totalPages: 0,
     pageSize: 5,
     pageSizes: [5, 10, 15],
-    usuario: {
+    editora: {
       id: null,
       nome: "",
       cidade: "",
-      endereco: "",
-      email: "",
     },
     headers: [
       {
@@ -216,39 +176,17 @@ export default {
       },
       { text: "Nome", value: "nome" },
       { text: "Cidade", value: "cidade" },
-      {
-        text: "Endereço",
-        value: "endereco",
-      },
-      { text: "Email", value: "email" },
-      {
-        text: "Ações",
-        value: "actions",
-        sortable: false,
-      },
+      { text: "Ações", value: "actions", sortable: false },
     ],
-   rules: {
-            required: value => !!value || 'Campo obrigatório',
-            counterMin: value => (value && value.length >= 3) || 'No mínimo 3 caracteres',
-            counterMax40: value => (value && value.length <= 40) || 'No máximo 40 caracteres',
-            counterMax50: value => (value && value.length <= 50) || 'No máximo 50 caracteres',
-            email: value => {
-                const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                return pattern.test(value) || 'E-mail invalido.';
-            },
-            nome: value => {
-                const pattern = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/;
-                return pattern.test(value) || 'Nome inválido.';
-            },
-            cidade: value => {
-                const pattern = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/;
-                return pattern.test(value) || 'Nome da cidade inválido.';
-            },
-        },
+    rules: [
+      (value) => !!value || "Campo obrigatório",
+      (value) => (value && value.length >= 3) || "No mínimo 3 caracteres",
+      (value) => (value && value.length <= 40) || "No máximo 40 caracteres",
+    ],
   }),
   computed: {
     formTitle() {
-      return !this.usuario.id ? "Novo Usuário" : "Editar Usuário";
+      return !this.editora.id ? "Nova editora" : "Editar editora";
     },
   },
   watch: {
@@ -263,55 +201,56 @@ export default {
     this.initialize();
   },
   methods: {
-        initialize() {
-            this.loading = true;
-            const params = this.getRequestParams(this.page, this.pageSize);
-            UsuarioService.findAll(params).then(res => {
-                const { content, totalElements, totalPages } = res.data;
-                this.usuarios = content;
-                this.totalusuarios = totalElements;
-                this.totalPages = totalPages;
-                this.loading = false;
-            });
-        },
-        getRequestParams(page, pageSize) {
-            let params = {};
-            if (page) {
-                params['page'] = page - 1;
-            }
-            if (pageSize) {
-                params['size'] = pageSize;
-            }
-            return params;
-        },
-        handlePageChange(value) {
-            this.page = value;
-            this.initialize();
-        },
-        handlePageSizeChange(size) {
-            this.pageSize = size;
-            this.page = 1;
-            this.initialize();
-        },
+    initialize() {
+      const params = this.getRequestParams(this.page, this.pageSize);
+      this.loading = true;
+      editoraService.findAll(params).then((res) => {
+        const { totalElements, totalPages, content } = res.data;
+        this.editoras = content;
+        this.totalEditoras = totalElements;
+        this.totalPages = totalPages;
+        this.loading = false;
+      });
+    },
+    getRequestParams(page, pageSize) {
+      let params = {};
+      if (page) {
+        params["page"] = page - 1;
+      }
+      if (pageSize) {
+        params["size"] = pageSize;
+      }
+      return params;
+    },
+    handlePageChange(value) {
+      this.page = value;
+      this.initialize();
+    },
+    handlePageSizeChange(size) {
+      this.pageSize = size;
+      this.page = 1;
+      this.initialize();
+    },
     editItem(item) {
-      this.usuario = { ...item };
+      this.editora = { ...item };
       this.dialog = true;
     },
     deleteItem(item) {
-      this.usuario = { ...item };
+      this.editora = { ...item };
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      UsuarioService.delete(this.usuario.id)
+      editoraService
+        .delete(this.editora.id)
         .then(() => {
-          Swal.fire("Usuário deletado com sucesso", "", "error");
-          this.usuario = {};
+          Swal.fire("Editora deletada com sucesso", "", "success");
+          this.editora = {};
           this.initialize();
         })
         .catch(() => {
           Swal.fire(
-            "Usuário não pode ser deletado",
-            "Esse usuário está vinculado a um aluguel",
+            "Editora não pode ser deletada",
+            "Essa editora está vinculada a um livro",
             "error"
           );
         });
@@ -321,7 +260,7 @@ export default {
       this.dialog = false;
       this.$refs.form.resetValidation();
       if (!this.dialog) {
-        this.usuario = {};
+        this.editora = {};
       }
     },
     closeDelete() {
@@ -329,20 +268,20 @@ export default {
     },
     save() {
       if (this.$refs.form.validate()) {
-        if (this.usuario.id) {
-          UsuarioService.update(this.usuario).then(() => {
-            Swal.fire("Usuário alterado com sucesso", "", "success");
-            this.usuario = {};
+        if (this.editora.id) {
+          editoraService.update(this.editora).then(() => {
+            Swal.fire("Editora alterada com sucesso", "", "success");
+            this.editora = {};
             this.initialize();
           });
         } else {
-          UsuarioService.save(this.usuario).then(() => {
-            Swal.fire("Usuário cadastrado com sucesso", "", "success");
-            this.usuario = {};
+          editoraService.save(this.editora).then(() => {
+            Swal.fire("Editora cadastrada com sucesso", "", "success");
+            this.editora = {};
             this.initialize();
           });
         }
-        this.usuario = {};
+        this.editora = {};
         this.close();
       }
     },

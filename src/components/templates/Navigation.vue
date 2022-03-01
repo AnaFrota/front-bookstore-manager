@@ -11,23 +11,23 @@
 
       <v-divider vertical></v-divider>
 
-      <v-btn text rounded to="/editoras"
+      <v-btn text rounded to="/publisher"
         ><v-icon size="20px"> mdi-bookshelf </v-icon> Editora
       </v-btn>
 
       <v-divider vertical></v-divider>
 
-      <v-btn text rounded to="/usuarios"
+      <v-btn text rounded to="/user"
         ><v-icon size="20px"> mdi-account-edit</v-icon> Usuario
       </v-btn>
 
       <v-divider vertical></v-divider>
-      <v-btn text rounded to="/livros"
+      <v-btn text rounded to="/book"
         ><v-icon size="20px">mdi-book-plus </v-icon> Livro
       </v-btn>
 
       <v-divider vertical></v-divider>
-      <v-btn text rounded to="/alugueis"
+      <v-btn text rounded to="/rent"
         ><v-icon size="20px">mdi-book-account </v-icon> Aluguel
       </v-btn>
     </v-toolbar-items>
@@ -41,10 +41,10 @@ export default {
     drawer: false,
     items: [
       { title: "Dashboard", icon: "mdi-view-dashboard", to: "/" },
-      { title: "Editora", icon: "mdi-bookshelf", to: "/editoras" },
-      { title: "Livro", icon: " mdi-book-plus", to: "/livros" },
-      { title: "Usuário", icon: "mdi-account-edit", to: "/usuarios" },
-      { title: "Aluguel", icon: "mdi-book-account", to: "/alugueis" },
+      { title: "Editora", icon: "mdi-bookshelf", to: "/publisher" },
+      { title: "Livro", icon: " mdi-book-plus", to: "/book" },
+      { title: "Usuário", icon: "mdi-account-edit", to: "/user" },
+      { title: "Aluguel", icon: "mdi-book-account", to: "/rent" },
     ],
   }),
 };

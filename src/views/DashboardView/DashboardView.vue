@@ -20,10 +20,10 @@
   </v-container>
 </template>
 <script>
-import aluguelService from "../service/AluguelService";
-import editoraService from "../service/EditoraService";
-import usuarioService from "../service/UsuarioService";
-import livroService from "../service/LivroService";
+import aluguelService from "@/service/AluguelService";
+import editoraService from "@/service/EditoraService";
+import usuarioService from "@/service/UsuarioService";
+import livroService from "@/service/LivroService";
 import moment from "moment";
 export default {
   data: () => ({
